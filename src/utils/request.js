@@ -4,6 +4,11 @@ import { ElMessage } from 'element-plus'
 import NProgress from 'nprogress'
 import i18n from '@/lang'
 
+// 获取全局API_PREFIX，如果不存在则使用空字符串
+const getApiPrefix = () => {
+  return window.API_PREFIX || ''
+}
+
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 function validateStatus(status) {
@@ -42,9 +47,21 @@ function validateStatus(status) {
     return status >= 200 && status < 300
 }
 
+// 构建基础URL
+const getBaseURL = () => {
+  const apiPrefix = getApiPrefix().replace(/^\/+|\/+$/g, '')
+  let base = process.env.NODE_ENV === 'production' ? '/' : '/api'
+  
+  if (apiPrefix) {
+    base = `${base.replace(/\/+$/, '')}/${apiPrefix}`
+  }
+  
+  return base.endsWith('/') ? base : `${base}/`
+}
+
 var instance = axios.create({
     timeout: 8000,
-    baseURL: process.env.NODE_ENV === 'production' ? '/' : '/api',
+    baseURL: getBaseURL(),
     validateStatus
 })
 
