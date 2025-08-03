@@ -300,7 +300,7 @@ export default {
             const textarea = document.getElementById('logshow')
             textarea.innerText = ''
             const envPrefix = process.env.NODE_ENV === 'production' ? '' : '/ws'
-            const prefix = window.API_PREFIX !== undefined ? window.API_PREFIX : envPrefix
+            const prefix = window.API_PREFIX !== undefined ? '/' + window.API_PREFIX : envPrefix
             const protocol = document.location.protocol === 'http:' ? 'ws' : 'wss'
             const wsUrl = `${protocol}://${location.host}${prefix}${prefix.endsWith('/') ? '' : '/'}trojan/log?line=${this.line}&token=${store.state.UserToken}`
             this.ws = new WebSocket(wsUrl)
